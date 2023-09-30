@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\website;
+use App\Models\WebsiteSelection;
 use Illuminate\Http\Request;
 use Validator;
 use Hash;
 
-class UserController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::where('user_role_id',2)->get();
-        return view('user')->with("users",$users);
+        $users = User::where('user_role_id',3)->get();
+        $websites = Website::get();
+        return view('client')->with(["users"=>$users , 'websites'=>$websites]);
     }
 
     /**
@@ -36,10 +39,10 @@ class UserController extends Controller
         try{
 
             $data = $request->all();
-
             $validator = Validator::make($data, [
                 'name' => 'required|max:20',
                 'email' => 'required|unique:users|max:50',
+                'website' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -48,9 +51,18 @@ class UserController extends Controller
             }else{
 
 
-                $data['user_role_id'] = 2;
+                $data['user_role_id'] = 3;
                 $data['password'] = Hash::make('login123');
                 $user = User::create($data);
+
+                WebsiteSelection::where('user_id',$user->id)->delete();
+                $websites = $data['website'];
+                foreach($websites as $website){
+                    $WebsiteSelections = new WebsiteSelection();
+                    $WebsiteSelections->user_id = $user->id;
+                    $WebsiteSelections->website_id = $website;
+                    $WebsiteSelections->save();
+                }
                 $message = 'User created successfully';
             }
             
@@ -73,9 +85,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return response(['status_code' => 200,'data' => $user->toArray()]);
+        $user = User::select('id','name','email')->where('id', $id)->first()->toArray();
+        $website = WebsiteSelection::select('user_id','website_id')->where('user_id',$id)->get()->toArray();
+        $data = array_merge(['user' => $user, 'website'=>$website]);
+        return response(['status_code' => 200,'data' => $data]);
     }
 
     /**
@@ -89,33 +104,43 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request,$id)
     {
         $status = 200;
-
         try{
 
             $data = $request->all();
-
+            
             $validator = Validator::make($data, [
-                'name' => 'required|max:20',
+                'name' => 'required|max:50',
                 'email' => 'required|max:50',
+                'website' => 'required'
+                // 'password' => 'required|max:50',
 
             ]);
 
             if($validator->fails()){
-
                 $status = 500;
                 $message = $validator->errors();
 
             }else{
-                $update_user = User::where('id', $user->id)->first();
+                
+                $update_user = User::where('id', $id)->first();
                 $update_user->name = $data['name'];
                 $update_user->email = $data['email'];
                 if (!empty($data['password'])) {
                     $update_user->password = Hash::make($data['password']);
                 }
                 $update_user->save();
+                
+                WebsiteSelection::where('user_id',$update_user->id)->delete();
+                $websites = $data['website'];
+                foreach($websites as $website){
+                    $WebsiteSelections = new WebsiteSelection();
+                    $WebsiteSelections->user_id = $update_user->id;
+                    $WebsiteSelections->website_id = $website;
+                    $WebsiteSelections->save();
+                }
                 $message = 'User updated successfully';
                
             }

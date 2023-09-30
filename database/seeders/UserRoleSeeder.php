@@ -14,7 +14,8 @@ class UserRoleSeeder extends Seeder
     {
         \App\Models\UserRole::insert([
             ['role' => 'Admin'],
-            ['role' => 'User']
+            ['role' => 'User'],
+            ['role' => 'Client'],
         ]);
     }
 }

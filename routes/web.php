@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\clientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,4 +24,5 @@ Auth::routes();
 Route::middleware(['auth', 'admin-role'])->group(function () {
     Route::resource('/websites', WebsiteController::class);
     Route::resource('/users', UserController::class);
+    Route::resource('/clients', clientController::class);
 });

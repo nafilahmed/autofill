@@ -7,10 +7,12 @@
     </ul>
   </div>
   <div class="main-menu-content">
-    <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation"> 
-      <li class="@if (Request::path() == 'users') active @endif nav-item"><a href="{{URL::to('/users')}}"><i class="ft-pie-chart"></i><span class="menu-title" data-i18n="">Users</span></a>
-      </li>
-      <li class="@if (Request::path() == 'websites') active @endif nav-item"><a href="{{URL::to('/websites')}}"><i class="ft-droplet"></i><span class="menu-title" data-i18n="">WebSites</span></a>
+    <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+      @if(auth::user()->user_role_id == 1)
+      <li class="@if (Request::path() == 'users') active @endif nav-item"><a href="{{URL::to('/users')}}"><i class="ft-pie-chart"></i><span class="menu-title" data-i18n="">Users</span></a></li>
+      @endif
+      <li class="@if (Request::path() == 'websites') active @endif nav-item"><a href="{{URL::to('/websites')}}"><i class="ft-droplet"></i><span class="menu-title" data-i18n="">WebSites</span></a></li>
+      <li class="@if (Request::path() == 'clients') active @endif nav-item"><a href="{{URL::to('/clients')}}"><i class="ft-droplet"></i><span class="menu-title" data-i18n="">Clients</span></a></li>
     </ul>
   </div>
 </div>
