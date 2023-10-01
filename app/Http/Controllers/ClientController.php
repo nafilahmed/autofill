@@ -8,6 +8,7 @@ use App\Models\WebsiteSelection;
 use Illuminate\Http\Request;
 use Validator;
 use Hash;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -16,8 +17,13 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $users = User::where('user_role_id',3)->get();
-        $websites = Website::get();
+        if(Auth::user()->user_role_id == 2){
+            $users = User::where(['user_role_id' => 3,'created_by' =>  Auth::user()->id])->get();
+            $websites = Website::where('created_by',Auth::user()->id)->get();
+        }else{
+            $users = User::where('user_role_id',3)->get();
+            $websites = Website::get();
+        }
         return view('client')->with(["users"=>$users , 'websites'=>$websites]);
     }
 
@@ -50,10 +56,13 @@ class ClientController extends Controller
                 $message = $validator->errors();
             }else{
 
-
-                $data['user_role_id'] = 3;
-                $data['password'] = Hash::make('login123');
-                $user = User::create($data);
+                $user = new User;
+                $user->name = $data['name'];
+                $user->email = $data['email'];
+                $user->user_role_id = 3;
+                $user->password =  Hash::make($data['password'] ?? 'login123');
+                $user->created_by = Auth::user()->id ;
+                $user->save();
 
                 WebsiteSelection::where('user_id',$user->id)->delete();
                 $websites = $data['website'];
@@ -128,6 +137,7 @@ class ClientController extends Controller
                 $update_user = User::where('id', $id)->first();
                 $update_user->name = $data['name'];
                 $update_user->email = $data['email'];
+                $update_user->created_by = Auth::user()->id;
                 if (!empty($data['password'])) {
                     $update_user->password = Hash::make($data['password']);
                 }

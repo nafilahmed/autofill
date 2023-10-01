@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Website;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class WebsiteController extends Controller
@@ -13,7 +14,11 @@ class WebsiteController extends Controller
      */
     public function index()
     {
-        $websites = Website::all();
+        if(Auth::user()->user_role_id == 2){
+            $websites = Website::where('created_by',Auth::user()->id)->get();
+        }else{
+            $websites = Website::all();
+        }
 
         return view('website')->with("websites",$websites);
     }
@@ -46,7 +51,11 @@ class WebsiteController extends Controller
                 $status = 500;
                 $message = $validator->errors();
             }else{
-                $website = Website::create($data);
+                $website = new Website;
+                $website->name = $data['name'];
+                $website->url = $data['url'];
+                $website->created_by = Auth::user()->id;
+                $website->save();
                 $message = 'Website created successfully';
             }
             
@@ -85,7 +94,7 @@ class WebsiteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Website $website)
+    public function update(Request $request,$id)
     {
         $status = 200;
 
@@ -105,8 +114,11 @@ class WebsiteController extends Controller
                 $message = $validator->errors();
 
             }else{
-
-                $website->update($data);
+                $website = Website::where('id', $id)->first();
+                $website->name = $data['name'];
+                $website->url = $data['url'];
+                $website->created_by = Auth::user()->id;
+                $website->save();
                 $message = 'Website updated successfully';
                
             }
