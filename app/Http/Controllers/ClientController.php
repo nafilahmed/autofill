@@ -97,8 +97,16 @@ class ClientController extends Controller
     public function show($id)
     {
         $user = User::select('id','name','email')->where('id', $id)->first()->toArray();
-        $website = WebsiteSelection::select('user_id','website_id')->where('user_id',$id)->get()->toArray();
-        $data = array_merge(['user' => $user, 'website'=>$website]);
+        $website = WebsiteSelection::where('user_id',$id)->get('website_id')->toArray();
+    
+        $data = [];
+        $data['website'] = [];
+        foreach ($website as $key => $value) {
+            $data['website'][] = $value['website_id'];
+        }
+
+        $data['user'] = $user;
+
         return response(['status_code' => 200,'data' => $data]);
     }
 

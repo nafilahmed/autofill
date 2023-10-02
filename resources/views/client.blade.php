@@ -170,7 +170,10 @@
                 $('#name').val(data.data.user.name);
                 $('#email').val(data.data.user.email);
                 // selectpicker
-                // $('select[name=selValue]').val(1);
+                
+                $("#website").val(data.data.website);
+                $("#website").selectpicker("refresh");
+
                 $('#password').val('');
 
             }, error: function (data) {
@@ -181,32 +184,9 @@
     });
 
 
-    // storage = chrome.storage.local;
-
-    
-    function brugernavn () {
-      window.addEventListener('load', function load(event) {
-          storage.get(['name'], function(result) {
-              if (result !== undefined && result.name !== undefined) {
-                  document.getElementById('name').value = result.name;
-            }
-        });
-
-          document.getElementById('gem').onclick = function() {
-            storage.remove('name');
-              storage.set({'name': document.getElementById('name').value});
-
-              storage.remove('email');
-                var adgangs = document.getElementById('email').value;
-                storage.set({'email' : adgangs});
-            };
-        });
-    }
-    
     $(document).on("click", '#save-btn', function (e) {
 
         if ($(this).attr('post-action') == "edit") {
-            brugernavn ();
             $.ajax({
                 type: 'PUT',
                 url: "<?php echo e(URL::to('/clients')); ?>/"+id,
