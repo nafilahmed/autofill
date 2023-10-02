@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\website;
+use App\Models\Website;
 use App\Models\WebsiteSelection;
 use Illuminate\Http\Request;
 use Validator;
