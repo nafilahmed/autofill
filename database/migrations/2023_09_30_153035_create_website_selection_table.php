@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('website_selection', function (Blueprint $table) {
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('website_id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('website_id');
+            $table->foreign('website_id')->references('id')->on('websites');            
             $table->timestamps();
         });
     }

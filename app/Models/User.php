@@ -43,4 +43,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function userCredentails()
+    {
+        return $this->belongsToMany(Website::class, 'website_selection', 'user_id', 'website_id');
+    }
+
+    public function credentail()
+    {
+        return $this->hasOne(User::class, 'created_by', 'id');
+    }
 }

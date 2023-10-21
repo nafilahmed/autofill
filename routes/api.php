@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\StoryController;
+use App\Http\Controllers\API\URLController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,3 +27,6 @@ Route::controller(AuthController::class)->middleware('auth:api')->group(function
 
 });
     
+Route::controller(URLController::class)->middleware('auth:api')->group(function(){
+    Route::post('getcredentials','getCredentials');
+});
