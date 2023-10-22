@@ -17,7 +17,6 @@ class URLController extends Controller
 {
     public function getCredentials(Request $request): Response
     {
-
         $site = $request->site;
 
         $data = User::whereHas('userCredentails', function (Builder $query) use ($site) {
@@ -25,5 +24,18 @@ class URLController extends Controller
         })->where(['user_role_id' => 3,'created_by' => Auth::user()->id])->get()->toArray();
 
         return Response(['data' => $data],200);
-    }  
+    }
+
+
+    public function getSites(Request $request): Response
+    {
+        // dd(Auth::user());
+        if(Auth::user()->user_role_id == 2){
+            $data = Website::where('created_by',Auth::user()->id)->get();
+        }else{
+            $data = Website::all();
+        }
+
+        return Response(['data' => $data],200);
+    }
 }
