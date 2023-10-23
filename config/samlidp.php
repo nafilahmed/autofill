@@ -22,11 +22,11 @@ return [
     // The URI to the saml metadata file, this describes your idP
     'issuer_uri' => 'saml/metadata',
     // The certificate
-    'cert' => env('SAMLIDP_CERT'),
+    // 'cert' => env('SAMLIDP_CERT'),
     // Name of the certificate PEM file, ignored if cert is used
     'certname' => 'cert.pem',
     // The certificate key
-    'key' => env('SAMLIDP_KEY'),
+    // 'key' => env('SAMLIDP_KEY'),
     // Name of the certificate key PEM file, ignored if key is used
     'keyname' => 'key.pem',
     // Encrypt requests and responses
@@ -39,22 +39,22 @@ return [
     'sp' => [
         // Base64 encoded ACS URL
         'aHR0cDovL2xvY2FsaG9zdC9mcmVzaC1hcHAvcHVibGljL2xvZ2lu' => [
-        //     // Your destination is the ACS URL of the Service Provider
+            // Your destination is the ACS URL of the Service Provider
             'destination' => 'http://localhost/fresh-app/public/login',
             'logout' => 'http://localhost/fresh-app/public/logout',
-        //    // SP certificate
+            // SP certificate
             'certificate' => 'file://' . storage_path('samlidp/cert.pem'),
-        //    // Turn off auto appending of the idp query param
-            'query_params' => false,
-        //    // Turn off the encryption of the assertion per SP
-            'encrypt_assertion' => false
+            // Turn off auto appending of the idp query param
+             'query_params' => false,
+            // Turn off the encryption of the assertion per SP
+             'encrypt_assertion' => false
         ]
     ],
 
     // If you need to redirect after SLO depending on SLO initiator
     // key is beginning of HTTP_REFERER value from SERVER, value is redirect path
     'sp_slo_redirects' => [
-        'http://localhost/fresh-app/public/saml/logout' => 'http://localhost/fresh-app/public/login',
+        // 'https://example.com' => 'https://example.com',
     ],
 
     // All of the Laravel SAML IdP event / listener mappings.
