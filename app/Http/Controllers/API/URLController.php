@@ -20,12 +20,11 @@ class URLController extends Controller
         $site = $request->site;
 
         $data = User::whereHas('userCredentails', function (Builder $query) use ($site) {
-            $query->where('websites.url', $site);
+            $query->where('websites.url','LIKE',"%$site%");
         })->where(['user_role_id' => 3,'created_by' => Auth::user()->id])->get()->toArray();
 
         return Response(['data' => $data],200);
     }
-
 
     public function getSites(Request $request): Response
     {
