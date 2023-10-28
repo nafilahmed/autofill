@@ -145,29 +145,6 @@
             }
         });
     });
-
-
-    // storage = chrome.storage.local;
-
-    
-    function brugernavn () {
-      window.addEventListener('load', function load(event) {
-          storage.get(['name'], function(result) {
-              if (result !== undefined && result.name !== undefined) {
-                  document.getElementById('name').value = result.name;
-            }
-        });
-
-          document.getElementById('gem').onclick = function() {
-            storage.remove('name');
-              storage.set({'name': document.getElementById('name').value});
-
-              storage.remove('email');
-                var adgangs = document.getElementById('email').value;
-                storage.set({'email' : adgangs});
-            };
-        });
-    }
     
     $(document).on("click", '#save-btn', function (e) {
 
@@ -209,7 +186,8 @@
             $.post("<?php echo e(URL::to('/users')); ?>", 
             {
                 name: $('#name').val(),
-                email: $('#email').val()
+                email: $('#email').val(),
+                password: $('#password').val()
             },
             function(data,status){
 
@@ -231,9 +209,9 @@
                 $(".alert").show();
             });
 
-            setTimeout(function(){
-                location.reload(true);
-            }, 2000);
+            // setTimeout(function(){
+            //     location.reload(true);
+            // }, 2000);
         }
         
     });

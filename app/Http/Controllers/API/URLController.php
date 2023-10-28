@@ -29,7 +29,6 @@ class URLController extends Controller
 
     public function getSites(Request $request): Response
     {
-        // dd(Auth::user());
         if(Auth::user()->user_role_id == 2){
             $data = Website::where('created_by',Auth::user()->id)->get();
         }else{

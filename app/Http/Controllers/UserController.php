@@ -49,8 +49,9 @@ class UserController extends Controller
 
 
                 $data['user_role_id'] = 2;
-                $data['password'] = Hash::make('login123');
+                $data['password'] = !empty($data['password']) ? Hash::make($data['password']) : Hash::make('login123');
                 $user = User::create($data);
+
                 $message = 'User created successfully';
             }
             
@@ -116,6 +117,8 @@ class UserController extends Controller
                     $update_user->password = Hash::make($data['password']);
                 }
                 $update_user->save();
+
+                // dd($update_user);
                 $message = 'User updated successfully';
                
             }
