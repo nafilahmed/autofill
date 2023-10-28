@@ -60,7 +60,7 @@ class ClientController extends Controller
                 $user->name = $data['name'];
                 $user->email = $data['email'];
                 $user->user_role_id = 3;
-                $user->password =  Hash::make($data['password'] ?? 'login123');
+                $user->password =  $data['password'] ?? '123456';
                 $user->created_by = Auth::user()->id ;
                 $user->save();
 
@@ -147,7 +147,7 @@ class ClientController extends Controller
                 $update_user->email = $data['email'];
                 $update_user->created_by = Auth::user()->id;
                 if (!empty($data['password'])) {
-                    $update_user->password = Hash::make($data['password']);
+                    $update_user->password = $data['password'];
                 }
                 $update_user->save();
                 

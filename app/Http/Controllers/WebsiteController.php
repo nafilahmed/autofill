@@ -43,8 +43,8 @@ class WebsiteController extends Controller
             $data = $request->all();
 
             $validator = Validator::make($data, [
-                'name' => 'required|max:20',
-                'url' => 'required|unique:websites|max:20',
+                'name' => 'required|max:100',
+                'url' => 'required|unique:websites|max:100',
             ]);
 
             if ($validator->fails()) {
@@ -103,8 +103,8 @@ class WebsiteController extends Controller
             $data = $request->all();
 
             $validator = Validator::make($data, [
-                'name' => 'required|max:20',
-                'url' => 'required|max:20',
+                'name' => 'required|max:100',
+                'url' => 'required|max:100',
 
             ]);
 
